@@ -28,9 +28,7 @@ function List(_ref) {
   var options = _ref.options;
   var onSelect = _ref.onSelect;
 
-  var list = _blessed2.default.list((0, _extends3.default)({
-    parent: this.screen
-  }, options, _defaultOptions2.default));
+  var list = _blessed2.default.list((0, _extends3.default)({}, options, _defaultOptions2.default));
 
   list.on('select', onSelect
 

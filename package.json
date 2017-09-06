@@ -20,7 +20,7 @@
   "dependencies": {
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.8.5",
-    "gittoken-socket": "0.0.2"
+    "gittoken-socket": "0.0.3"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

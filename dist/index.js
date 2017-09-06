@@ -4,13 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends2 = require('babel-runtime/helpers/extends');
+var _stringify = require('babel-runtime/core-js/json/stringify');
 
-var _extends3 = _interopRequireDefault(_extends2);
-
-var _keys = require('babel-runtime/core-js/object/keys');
-
-var _keys2 = _interopRequireDefault(_keys);
+var _stringify2 = _interopRequireDefault(_stringify);
 
 var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
 
@@ -44,79 +40,31 @@ var GitTokenTerminal = function GitTokenTerminal(_ref) {
   (0, _classCallCheck3.default)(this, GitTokenTerminal);
 
   this.screen = _blessed2.default.screen({
+    title: title,
     smartCSR: true,
     height: 600,
     width: 800
   });
 
-  this.screen.title = title;
-
-  this.contractDetails = _index.contractDetails.bind(this
-  // this.contractDetails()
-
-  );this.List = _index.List.bind(this);
+  this.List = _index.List.bind(this);
   this.Table = _index.Table.bind(this);
-
-  this.grid = new _blessedContrib2.default.grid({
-    rows: 12,
-    cols: 12,
-    screen: this.screen
-  });
+  this.Dashboard = _index.Dashboard.bind(this
 
   // Quit on Escape, q, or Control-C.
-  this.screen.key(['escape', 'q', 'C-c'], function (ch, key) {
+  );this.screen.key(['escape', 'q', 'C-c'], function (ch, key) {
     return process.exit(0);
   });
 
   this.gittoken = new _client2.default({ socketUri: socketUri });
-
-  this.gittoken.on('data', function (data) {
-    var _JSON$parse = JSON.parse(data);
-
-    var event = _JSON$parse.event;
-    var result = _JSON$parse.result;
-
-
-    var headers = (0, _keys2.default)(result[0]);
-    var items = (0, _keys2.default)(result[0]).map(function (item) {
-      return String(result[0][item]);
+  this.gittoken.on('connect', function () {
+    _this.gittoken.socket.send((0, _stringify2.default)({ event: 'get_contract' }));
+    _this.Dashboard({
+      options: {
+        parent: _this.screen,
+        width: '100%',
+        draggable: true
+      }
     });
-    var rows = [headers, items];
-
-    _this.grid.set(0, 0, 2, 12, _blessed2.default.table, (0, _extends3.default)({}, _defaultOptions2.default, {
-      align: 'left',
-      title: 'GitToken Contract Details',
-      rows: rows
-    }));
-
-    _this.grid.set(1, 0, 8, 4, _blessed2.default.list, (0, _extends3.default)({}, _defaultOptions2.default, {
-      title: 'GitToken Contract Details',
-      items: items
-    }));
-
-    _this.screen.render();
-
-    // this.Table({
-    //   options: {
-    //     top: "80%",
-    //     width: '100%',
-    //     height: '100%',
-    //     title: 'GitToken Contract Details',
-    //     rows
-    //   },
-    //   onSelect: (item, index) => { console.log(index) }
-    // })
-
-    // this.List({
-    //   options: {
-    //     bottom: "60%",
-    //     height: '100%',
-    //     width: '100%',
-    //     title: 'GitToken Contract Details',
-    //     items
-    //   },
-    //   onSelect: (item, index) => { console.log(index) }
-    // })
   }
 
   // Render the screen.

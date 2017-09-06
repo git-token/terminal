@@ -5,7 +5,6 @@ import defaultOpts from './defaultOptions'
 
 export default function List({ options, onSelect }) {
   const list = blessed.list({
-    parent: this.screen,
     ...options,
     ...defaultOpts
   });
