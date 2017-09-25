@@ -25,14 +25,16 @@ var _defaultOptions2 = _interopRequireDefault(_defaultOptions);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function Table(_ref) {
-  var options = _ref.options;
-  var onSelect = _ref.onSelect;
+  var options = _ref.options,
+      select = _ref.select;
 
-  var table = _blessed2.default.table((0, _extends3.default)({
-    parent: this.screen
+  var table = _blessed2.default.listtable((0, _extends3.default)({
+    draggable: false,
+    noCellBorders: true,
+    pad: 1
   }, options, _defaultOptions2.default));
 
-  table.on('select', onSelect
+  table.on('select', select);
 
   // Allow scrolling with the mousewheel (manually).
   // table.on('wheeldown', function() {
@@ -42,6 +44,8 @@ function Table(_ref) {
   // table.on('wheelup', function() {
   //   table.up();
   // });
+  //
+  // table.focus();
 
-  );this.screen.render();
+  return table;
 }
