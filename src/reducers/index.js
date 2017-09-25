@@ -1,11 +1,8 @@
 const INITIAL_STATE = {
   views: [
     'Registry',
-    'Account',
-    'Register',
     'Torvalds Network',
-    'Community',
-    'Downloads'
+    'Account',
   ],
   currentView: 'Welcome',
   currentOrganization: {},

@@ -27,17 +27,17 @@ function Welcome(_ref) {
 
   var value = 'GitToken Terminal v' + require('../../package.json').version;
 
-  this.sidenav ? this.screen.remove(this.sidenav) : null;
+  this.topnav ? this.screen.remove(this.topnav) : null;
 
-  this.SideNav({ state: state });
+  this.TopNav({ state: state });
+  // this.SideNav({ state })
   this.welcome = _blessed2.default.textarea((0, _extends3.default)({
     parent: this.screen,
-    label: '' + value,
-    height: '100%',
-    width: '90%',
+    label: value,
+    height: '94%',
+    width: '100%',
     align: 'center',
-    left: '10%',
-    top: 'center',
+    top: '6%',
     value: value
   }, this.defaultOptions));
 

@@ -8,23 +8,20 @@ var _extends2 = require('babel-runtime/helpers/extends');
 
 var _extends3 = _interopRequireDefault(_extends2);
 
-exports.default = SideNav;
+exports.default = TopNav;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function SideNav(_ref) {
+function TopNav(_ref) {
   var _this = this;
 
   var state = _ref.state;
   var views = state.views;
 
-  this.sidenav = this.List({
+  this.topnav = this.BarList({
     options: (0, _extends3.default)({}, this.defaultOptions, {
       parent: this.screen,
       label: 'GitToken',
-      left: '0%',
-      top: '10%',
-      width: '10%',
       draggable: false,
       items: views
     }),

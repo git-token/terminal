@@ -2,12 +2,14 @@ import blessed from 'blessed';
 import contrib from 'blessed-contrib';
 import {
   List,
+  BarList,
   Table,
 } from './components/index'
 
 import {
   Dashboard,
   SideNav,
+  TopNav,
   Registry
 } from './views/Dashboard/index'
 
@@ -35,15 +37,17 @@ export default class GitTokenTerminal {
 
     this.store = store
     this.currentView = ''
-    
+
     // Components
     this.List           = List.bind(this)
+    this.BarList        = BarList.bind(this)
     this.Table          = Table.bind(this)
     this.defaultOptions = defaultOpts
 
     // Views
     this.Dashboard    = Dashboard.bind(this)
     this.Organization = Organization.bind(this)
+    this.TopNav      = TopNav.bind(this)
     this.SideNav      = SideNav.bind(this)
     this.ViewManager  = ViewManager.bind(this)
     this.Registry     = Registry.bind(this)

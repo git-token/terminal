@@ -45,29 +45,28 @@ function Registry(_ref) {
     return rows;
   };
 
-  this.SideNav({ state: state });
+  this.TopNav({ state: state });
   this.registry ? this.screen.remove(this.registry) : null;
   this.registry = this.Table({
     options: (0, _extends3.default)({}, this.defaultOptions, {
       parent: this.screen,
       label: 'GitHub Organizations Registered with GitToken',
-      left: '10%',
       align: 'left',
-      width: '90%',
-      height: '100%',
-      title: 'GitToken Registry',
+      width: '100%',
+      top: '6%',
+      height: '95%',
       rows: registryRows({ registered: registered })
     }),
     select: function select(item, index) {
       var result = registered[index - 1];
       _this.store.dispatch({ type: 'SET_ORGANIZATION', result: result });
       _this.store.dispatch({ type: 'SET_VIEW', result: 'Organization' });
-      _this.screen.remove(_this.sidenav);
+      _this.screen.remove(_this.topnav);
     }
   });
 
   this.screen.remove(this.welcome);
   this.screen.append(this.registry);
-  this.screen.remove(this.sidenav);
+  this.screen.remove(this.topnav);
   this.screen.render();
 }

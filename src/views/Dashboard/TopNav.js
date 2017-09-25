@@ -1,13 +1,10 @@
-export default function SideNav({ state }) {
+export default function TopNav({ state }) {
   const { views } = state
-  this.sidenav = this.List({
+  this.topnav = this.BarList({
     options: {
       ...this.defaultOptions,
       parent: this.screen,
       label: `GitToken`,
-      left: '0%',
-      top: '10%',
-      width: '10%',
       draggable: false,
       items: views
     },

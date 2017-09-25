@@ -1,13 +1,17 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
-exports.List = exports.Table = undefined;
+exports.BarList = exports.List = exports.Table = undefined;
 
 var _List = require('./List');
 
 var _List2 = _interopRequireDefault(_List);
+
+var _BarList = require('./BarList');
+
+var _BarList2 = _interopRequireDefault(_BarList);
 
 var _Table = require('./Table');
 
@@ -17,3 +21,4 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.Table = _Table2.default;
 exports.List = _List2.default;
+exports.BarList = _BarList2.default;

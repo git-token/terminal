@@ -72,12 +72,14 @@ var GitTokenTerminal = function () {
 
     // Components
     this.List = _index.List.bind(this);
+    this.BarList = _index.BarList.bind(this);
     this.Table = _index.Table.bind(this);
     this.defaultOptions = _defaultOptions2.default;
 
     // Views
     this.Dashboard = _index2.Dashboard.bind(this);
     this.Organization = _index3.Organization.bind(this);
+    this.TopNav = _index2.TopNav.bind(this);
     this.SideNav = _index2.SideNav.bind(this);
     this.ViewManager = _ViewManager2.default.bind(this);
     this.Registry = _index2.Registry.bind(this);
