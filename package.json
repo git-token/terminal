@@ -1,6 +1,6 @@
 {
   "name": "gittoken-terminal",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "GitToken Terminal Application",
   "main": "./dist/index.js",
   "scripts": {

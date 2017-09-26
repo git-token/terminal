@@ -8,9 +8,9 @@ var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
 
 var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
-var _extends5 = require('babel-runtime/helpers/extends');
+var _extends6 = require('babel-runtime/helpers/extends');
 
-var _extends6 = _interopRequireDefault(_extends5);
+var _extends7 = _interopRequireDefault(_extends6);
 
 exports.default = reducer;
 
@@ -21,17 +21,7 @@ var INITIAL_STATE = {
   currentView: 'Welcome',
   currentOrganization: {},
   registered: [],
-  organizations: {
-    'git-token': {
-      summaryDetails: {},
-      contributionHistory: [],
-      leaderBoard: [],
-      contributionFrequency: [],
-      supplyGrowth: [],
-      milestones: [],
-      auctions: []
-    }
-  }
+  organizations: {}
 };
 
 function reducer() {
@@ -43,22 +33,27 @@ function reducer() {
 
       state['organizations'][action.org] = !state['organizations'][action.org] ? {} : state['organizations'][action.org];
 
-      return (0, _extends6.default)({}, state, {
-        organizations: (0, _extends6.default)({}, state['organizations'], (0, _defineProperty3.default)({}, action.org, (0, _extends6.default)({}, state['organizations'][action.org], (0, _defineProperty3.default)({}, action.event, (0, _extends6.default)({}, state['organizations'][action.org][action.event], (0, _defineProperty3.default)({}, action.id, action.data))))))
+      return (0, _extends7.default)({}, state, {
+        organizations: (0, _extends7.default)({}, state['organizations'], (0, _defineProperty3.default)({}, action.org, (0, _extends7.default)({}, state['organizations'][action.org], (0, _defineProperty3.default)({}, action.event, (0, _extends7.default)({}, state['organizations'][action.org][action.event], (0, _defineProperty3.default)({}, action.id, action.data))))))
+      });
+      break;
+    case 'ORGANIZATION_DATA':
+      return (0, _extends7.default)({}, state, {
+        organizations: (0, _extends7.default)({}, state['organizations'], (0, _defineProperty3.default)({}, action.org, action.data))
       });
       break;
     case 'SET_ORGANIZATION':
-      return (0, _extends6.default)({}, state, {
+      return (0, _extends7.default)({}, state, {
         currentOrganization: action.result
       });
       break;
     case 'SET_VIEW':
-      return (0, _extends6.default)({}, state, {
+      return (0, _extends7.default)({}, state, {
         currentView: action.result
       });
       break;
     case 'GET_REGISTERED':
-      return (0, _extends6.default)({}, state, {
+      return (0, _extends7.default)({}, state, {
         registered: action.result
       });
       break;

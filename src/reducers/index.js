@@ -8,17 +8,7 @@ const INITIAL_STATE = {
   currentView: 'Welcome',
   currentOrganization: {},
   registered: [],
-  organizations: {
-    'git-token': {
-      summaryDetails: {},
-      contributionHistory: [],
-      leaderBoard: [],
-      contributionFrequency: [],
-      supplyGrowth: [],
-      milestones: [],
-      auctions: []
-    }
-  }
+  organizations: {}
 }
 
 export default function reducer(state=INITIAL_STATE, action) {
@@ -40,6 +30,15 @@ export default function reducer(state=INITIAL_STATE, action) {
               [action.id]: action.data
             }
           }
+        }
+      }
+      break;
+    case 'ORGANIZATION_DATA':
+      return {
+        ...state,
+        organizations: {
+          ...state['organizations'],
+          [action.org]: action.data
         }
       }
       break;
