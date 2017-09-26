@@ -11,10 +11,10 @@ export default function Welcome({ state }) {
   this.welcome = blessed.textarea({
     parent: this.screen,
     label: value,
-    height: '95%',
+    height: '81%',
     width: '100%',
     align: 'center',
-    top: '6%',
+    top: '20%',
     value,
     ...this.defaultOptions,
   });
@@ -23,11 +23,16 @@ export default function Welcome({ state }) {
     font: `block`
   }, (error, result) => {
     if (!error) {
-      this.welcome.setValue(result)
+      this.welcome.setValue(`\n\n\n
+        ${value} (alpha)\n\n\n
+        Hello! Thank You for using GitToken!\n
+        Please review our Terms of Service (ToS) before continuing\n
+        https://github.com/git-token/documentation/blob/master/tos/terms_of_services.md\n\n\n
+        Happy Coding!
+      `)
+      this.screen.append(this.welcome)
+      this.screen.render()
     }
   })
 
-
-  this.screen.append(this.welcome)
-  this.screen.render()
 }

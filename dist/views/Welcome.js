@@ -34,10 +34,10 @@ function Welcome(_ref) {
   this.welcome = _blessed2.default.textarea((0, _extends3.default)({
     parent: this.screen,
     label: value,
-    height: '95%',
+    height: '81%',
     width: '100%',
     align: 'center',
-    top: '6%',
+    top: '20%',
     value: value
   }, this.defaultOptions));
 
@@ -45,10 +45,9 @@ function Welcome(_ref) {
     font: 'block'
   }, function (error, result) {
     if (!error) {
-      _this.welcome.setValue(result);
+      _this.welcome.setValue('\n\n\n\n        ' + value + ' (alpha)\n\n\n\n        Hello! Thank You for using GitToken!\n\n        Please review our Terms of Service (ToS) before continuing\n\n        https://github.com/git-token/documentation/blob/master/tos/terms_of_services.md\n\n\n\n        Happy Coding!\n      ');
+      _this.screen.append(_this.welcome);
+      _this.screen.render();
     }
   });
-
-  this.screen.append(this.welcome);
-  this.screen.render();
 }

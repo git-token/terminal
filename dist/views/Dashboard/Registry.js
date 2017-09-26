@@ -57,8 +57,8 @@ function Registry(_ref) {
       label: 'GitHub Organizations Registered with GitToken',
       align: 'left',
       width: '100%',
-      top: '6%',
-      height: '95%',
+      top: '20%',
+      height: '81%',
       rows: registryRows({ registered: registered })
     }),
     select: function select(item, index) {

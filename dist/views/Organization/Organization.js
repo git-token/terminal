@@ -49,7 +49,7 @@ function Organization(_ref) {
     options: (0, _extends3.default)({
       parent: this.screen,
       label: 'Details for ' + organization,
-      top: '6%',
+      top: '20%',
       height: '20%',
       width: '33%',
       align: 'left'
@@ -62,7 +62,7 @@ function Organization(_ref) {
     options: (0, _extends3.default)({
       parent: this.screen,
       label: 'Leader Board for ' + organization,
-      top: '26%',
+      top: '40%',
       height: '20%',
       width: '33%',
       align: 'left'
@@ -98,8 +98,8 @@ function Organization(_ref) {
     options: (0, _extends3.default)({
       parent: this.screen,
       label: 'Contribution History for ' + organization,
-      top: '46%',
-      height: '56%',
+      top: '60%',
+      height: '40%',
       width: '33%',
       align: 'left'
     }, this.defaultOptions, {
