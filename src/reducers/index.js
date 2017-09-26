@@ -3,20 +3,51 @@ const INITIAL_STATE = {
     'Registry',
     'Torvalds Network',
     'Account',
+    'Exchange'
   ],
   currentView: 'Welcome',
   currentOrganization: {},
   registered: [],
-  contributions: []
+  organizations: {
+    'git-token': {
+      summaryDetails: {},
+      contributionHistory: [],
+      leaderBoard: [],
+      contributionFrequency: [],
+      supplyGrowth: [],
+      milestones: [],
+      auctions: []
+    }
+  }
 }
 
 export default function reducer(state=INITIAL_STATE, action) {
   switch(action.type) {
+    case 'WATCH_TOKEN':
+
+      state['organizations'][action.org] =
+        !state['organizations'][action.org] ? {} :
+        state['organizations'][action.org]
+
+      return {
+        ...state,
+        organizations: {
+          ...state['organizations'],
+          [action.org]: {
+            ...state['organizations'][action.org],
+            [action.event]: {
+              ...state['organizations'][action.org][action.event],
+              [action.id]: action.data
+            }
+          }
+        }
+      }
+      break;
     case 'SET_ORGANIZATION':
-    return {
-      ...state,
-      currentOrganization: action.result
-    }
+      return {
+        ...state,
+        currentOrganization: action.result
+      }
     break;
     case 'SET_VIEW':
       return {
@@ -31,6 +62,6 @@ export default function reducer(state=INITIAL_STATE, action) {
       }
       break;
     default:
-      state
+      return state
   }
 }

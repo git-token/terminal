@@ -1,6 +1,6 @@
 {
   "name": "gittoken-terminal",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "GitToken Terminal Application",
   "main": "./dist/index.js",
   "scripts": {
@@ -21,8 +21,9 @@
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.8.5",
     "figlet": "^1.2.0",
-    "gittoken-socket": "0.0.6",
-    "redux": "^3.7.2"
+    "gittoken-socket": "0.0.11",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

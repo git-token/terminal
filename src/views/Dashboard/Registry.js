@@ -42,8 +42,14 @@ export default function Registry({ state }) {
     },
     select: (item, index) => {
       const result = registered[index - 1]
+      const { organization, token_address } = result
+
       this.store.dispatch({ type: 'SET_ORGANIZATION', result  })
       this.store.dispatch({ type: 'SET_VIEW', result: 'Organization'  })
+      this.websocket.socket.send(JSON.stringify({
+        type: 'WATCH_TOKEN',
+        data: { organization, token: token_address }
+      }))
       this.screen.remove(this.topnav)
     }
   })

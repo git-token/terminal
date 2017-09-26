@@ -34,7 +34,7 @@ function Welcome(_ref) {
   this.welcome = _blessed2.default.textarea((0, _extends3.default)({
     parent: this.screen,
     label: value,
-    height: '94%',
+    height: '95%',
     width: '100%',
     align: 'center',
     top: '6%',

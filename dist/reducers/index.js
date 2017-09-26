@@ -4,20 +4,34 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends2 = require('babel-runtime/helpers/extends');
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
 
-var _extends3 = _interopRequireDefault(_extends2);
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _extends5 = require('babel-runtime/helpers/extends');
+
+var _extends6 = _interopRequireDefault(_extends5);
 
 exports.default = reducer;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var INITIAL_STATE = {
-  views: ['Registry', 'Torvalds Network', 'Account'],
+  views: ['Registry', 'Torvalds Network', 'Account', 'Exchange'],
   currentView: 'Welcome',
   currentOrganization: {},
   registered: [],
-  contributions: []
+  organizations: {
+    'git-token': {
+      summaryDetails: {},
+      contributionHistory: [],
+      leaderBoard: [],
+      contributionFrequency: [],
+      supplyGrowth: [],
+      milestones: [],
+      auctions: []
+    }
+  }
 };
 
 function reducer() {
@@ -25,22 +39,30 @@ function reducer() {
   var action = arguments[1];
 
   switch (action.type) {
+    case 'WATCH_TOKEN':
+
+      state['organizations'][action.org] = !state['organizations'][action.org] ? {} : state['organizations'][action.org];
+
+      return (0, _extends6.default)({}, state, {
+        organizations: (0, _extends6.default)({}, state['organizations'], (0, _defineProperty3.default)({}, action.org, (0, _extends6.default)({}, state['organizations'][action.org], (0, _defineProperty3.default)({}, action.event, (0, _extends6.default)({}, state['organizations'][action.org][action.event], (0, _defineProperty3.default)({}, action.id, action.data))))))
+      });
+      break;
     case 'SET_ORGANIZATION':
-      return (0, _extends3.default)({}, state, {
+      return (0, _extends6.default)({}, state, {
         currentOrganization: action.result
       });
       break;
     case 'SET_VIEW':
-      return (0, _extends3.default)({}, state, {
+      return (0, _extends6.default)({}, state, {
         currentView: action.result
       });
       break;
     case 'GET_REGISTERED':
-      return (0, _extends3.default)({}, state, {
+      return (0, _extends6.default)({}, state, {
         registered: action.result
       });
       break;
     default:
-      state;
+      return state;
   }
 }

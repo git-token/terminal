@@ -11,7 +11,7 @@ export default function Welcome({ state }) {
   this.welcome = blessed.textarea({
     parent: this.screen,
     label: value,
-    height: '94%',
+    height: '95%',
     width: '100%',
     align: 'center',
     top: '6%',

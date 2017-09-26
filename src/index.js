@@ -1,5 +1,10 @@
 import blessed from 'blessed';
 import contrib from 'blessed-contrib';
+
+import {
+  subscribe
+} from './actions/index'
+
 import {
   List,
   BarList,
@@ -38,6 +43,9 @@ export default class GitTokenTerminal {
     this.store = store
     this.currentView = ''
 
+    // Action Methods
+    this.subscribe = subscribe.bind(this)
+
     // Components
     this.List           = List.bind(this)
     this.BarList        = BarList.bind(this)
@@ -60,35 +68,36 @@ export default class GitTokenTerminal {
     });
 
     // Connect To GitToken WebSocket Server
-    this.gittoken = new GitTokenSocketClient({ socketUri })
-    this.gittoken.on('connect', () => {
-      this.gittoken.socket.send(JSON.stringify({ event: 'get_registered' }))
+    this.websocket = new GitTokenSocketClient({ socketUri })
+    this.websocket.on('connect', () => {
+      this.websocket.socket.send(JSON.stringify({ type: 'GET_REGISTERED' }))
       this.render()
     })
 
-    // Hook Redux Store to incoming socket messages
-    this.gittoken.on('data', (data) => {
+    this.websocket.on('data', (data) => {
       const msg = JSON.parse(data.toString('utf8'))
-      const { event, result } = msg
-      this.store.dispatch({type: event.toUpperCase(), result })
+      this.store.dispatch(msg)
+      // console.log('msg', msg)
+      // if(msg.type == 'GET_REGISTERED') {
+      //   this.store.dispatch(msg)
+      // }
+
     })
 
     // Render the screen.
     this.screen.render();
-
   }
 
   render() {
-
     // List for updates to the state and render views if necessary
     const unsubscribe = this.store.subscribe(() => {
       const state = this.store.getState()
+      // console.log('state.organizations', state.organizations)
       const { currentView } = state
       if (this.currentView != currentView) {
         this.currentView = currentView
-        this.ViewManager({ state, view: this.currentView })
       }
-
+      this.ViewManager({ state, view: this.currentView })
     })
   }
 

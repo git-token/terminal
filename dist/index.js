@@ -24,15 +24,17 @@ var _blessedContrib = require('blessed-contrib');
 
 var _blessedContrib2 = _interopRequireDefault(_blessedContrib);
 
-var _index = require('./components/index');
+var _index = require('./actions/index');
 
-var _index2 = require('./views/Dashboard/index');
+var _index2 = require('./components/index');
+
+var _index3 = require('./views/Dashboard/index');
 
 var _ViewManager = require('./views/ViewManager');
 
 var _ViewManager2 = _interopRequireDefault(_ViewManager);
 
-var _index3 = require('./views/Organization/index');
+var _index4 = require('./views/Organization/index');
 
 var _Welcome = require('./views/Welcome');
 
@@ -70,19 +72,22 @@ var GitTokenTerminal = function () {
     this.store = _store2.default;
     this.currentView = '';
 
+    // Action Methods
+    this.subscribe = _index.subscribe.bind(this);
+
     // Components
-    this.List = _index.List.bind(this);
-    this.BarList = _index.BarList.bind(this);
-    this.Table = _index.Table.bind(this);
+    this.List = _index2.List.bind(this);
+    this.BarList = _index2.BarList.bind(this);
+    this.Table = _index2.Table.bind(this);
     this.defaultOptions = _defaultOptions2.default;
 
     // Views
-    this.Dashboard = _index2.Dashboard.bind(this);
-    this.Organization = _index3.Organization.bind(this);
-    this.TopNav = _index2.TopNav.bind(this);
-    this.SideNav = _index2.SideNav.bind(this);
+    this.Dashboard = _index3.Dashboard.bind(this);
+    this.Organization = _index4.Organization.bind(this);
+    this.TopNav = _index3.TopNav.bind(this);
+    this.SideNav = _index3.SideNav.bind(this);
     this.ViewManager = _ViewManager2.default.bind(this);
-    this.Registry = _index2.Registry.bind(this);
+    this.Registry = _index3.Registry.bind(this);
     this.Welcome = _Welcome2.default.bind(this);
 
     // Quit on Escape, q, or Control-C.
@@ -91,19 +96,19 @@ var GitTokenTerminal = function () {
     });
 
     // Connect To GitToken WebSocket Server
-    this.gittoken = new _client2.default({ socketUri: socketUri });
-    this.gittoken.on('connect', function () {
-      _this.gittoken.socket.send((0, _stringify2.default)({ event: 'get_registered' }));
+    this.websocket = new _client2.default({ socketUri: socketUri });
+    this.websocket.on('connect', function () {
+      _this.websocket.socket.send((0, _stringify2.default)({ type: 'GET_REGISTERED' }));
       _this.render();
     });
 
-    // Hook Redux Store to incoming socket messages
-    this.gittoken.on('data', function (data) {
+    this.websocket.on('data', function (data) {
       var msg = JSON.parse(data.toString('utf8'));
-      var event = msg.event,
-          result = msg.result;
-
-      _this.store.dispatch({ type: event.toUpperCase(), result: result });
+      _this.store.dispatch(msg);
+      // console.log('msg', msg)
+      // if(msg.type == 'GET_REGISTERED') {
+      //   this.store.dispatch(msg)
+      // }
     });
 
     // Render the screen.
@@ -118,12 +123,13 @@ var GitTokenTerminal = function () {
       // List for updates to the state and render views if necessary
       var unsubscribe = this.store.subscribe(function () {
         var state = _this2.store.getState();
+        // console.log('state.organizations', state.organizations)
         var currentView = state.currentView;
 
         if (_this2.currentView != currentView) {
           _this2.currentView = currentView;
-          _this2.ViewManager({ state: state, view: _this2.currentView });
         }
+        _this2.ViewManager({ state: state, view: _this2.currentView });
       });
     }
   }]);

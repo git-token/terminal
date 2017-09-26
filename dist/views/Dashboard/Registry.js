@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
 var _extends2 = require('babel-runtime/helpers/extends');
 
 var _extends3 = _interopRequireDefault(_extends2);
@@ -59,8 +63,16 @@ function Registry(_ref) {
     }),
     select: function select(item, index) {
       var result = registered[index - 1];
+      var organization = result.organization,
+          token_address = result.token_address;
+
+
       _this.store.dispatch({ type: 'SET_ORGANIZATION', result: result });
       _this.store.dispatch({ type: 'SET_VIEW', result: 'Organization' });
+      _this.websocket.socket.send((0, _stringify2.default)({
+        type: 'WATCH_TOKEN',
+        data: { organization: organization, token: token_address }
+      }));
       _this.screen.remove(_this.topnav);
     }
   });
