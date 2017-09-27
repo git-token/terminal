@@ -11,10 +11,10 @@ export default function Welcome({ state }) {
   this.welcome = blessed.textarea({
     parent: this.screen,
     label: value,
-    height: '81%',
+    top: '10%',
+    height: '91%',
     width: '100%',
     align: 'center',
-    top: '20%',
     value,
     ...this.defaultOptions,
   });

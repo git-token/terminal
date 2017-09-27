@@ -22,6 +22,10 @@ var _blessed = require('blessed');
 
 var _blessed2 = _interopRequireDefault(_blessed);
 
+var _blessedContrib = require('blessed-contrib');
+
+var _blessedContrib2 = _interopRequireDefault(_blessedContrib);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -44,12 +48,13 @@ function Organization(_ref) {
   this.orgDetails ? this.screen.remove(this.orgDetails) : null;
   this.leaderBoard ? this.screen.remove(this.leaderBoard) : null;
   this.contributionHistory ? this.screen.remove(this.contributionHistory) : null;
+  this.supplyChart ? this.screen.remove(this.supplyChart) : null;
 
   this.orgDetails = this.Table({
     options: (0, _extends3.default)({
       parent: this.screen,
       label: 'Details for ' + organization,
-      top: '20%',
+      top: '10%',
       height: '20%',
       width: '33%',
       align: 'left'
@@ -62,7 +67,7 @@ function Organization(_ref) {
     options: (0, _extends3.default)({
       parent: this.screen,
       label: 'Leader Board for ' + organization,
-      top: '40%',
+      top: '30%',
       height: '20%',
       width: '33%',
       align: 'left'
@@ -98,14 +103,35 @@ function Organization(_ref) {
     options: (0, _extends3.default)({
       parent: this.screen,
       label: 'Contribution History for ' + organization,
-      top: '60%',
-      height: '40%',
+      top: '50%',
+      height: '50%',
       width: '33%',
       align: 'left'
     }, this.defaultOptions, {
       rows: [['Username', 'Type', symbol + ' Awarded', 'Date']].concat((0, _toConsumableArray3.default)(contributionHistory))
     })
   });
+
+  this.supplyChart = _blessedContrib2.default.line((0, _extends3.default)({}, this.defaultOptions, {
+    xLabelPadding: 10,
+    xPadding: 5,
+    showLegend: true,
+    top: '10%',
+    left: '33%',
+    height: '41%',
+    width: '67%',
+    wholeNumbersOnly: true,
+    label: 'Supply of ' + symbol + ' Token'
+  }));
+
+  this.screen.append(this.supplyChart);
+  this.supplySeries = {
+    title: '' + symbol,
+    x: ['100', '200', '300', '400'],
+    y: [1, 8, 3, 4]
+  };
+
+  this.supplyChart.setData(this.supplySeries);
 
   this.screen.append(this.orgDetails);
   this.screen.append(this.leaderBoard);

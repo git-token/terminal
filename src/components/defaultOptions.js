@@ -15,7 +15,9 @@ const options = {
     },
     click: {
       bg: '#17082b'
-    }
+    },
+    line: 202,
+    text: 202
   },
   // Allow mouse support
   mouse: true,

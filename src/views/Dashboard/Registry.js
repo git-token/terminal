@@ -36,8 +36,8 @@ export default function Registry({ state }) {
       label: `GitHub Organizations Registered with GitToken`,
       align: 'left',
       width: '100%',
-      top: '20%',
-      height: '81%',
+      top: '10%',
+      height: '91%',
       rows: registryRows({ registered })
     },
     select: (item, index) => {

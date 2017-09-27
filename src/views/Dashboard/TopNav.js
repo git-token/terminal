@@ -5,7 +5,7 @@ export default function TopNav({ state }) {
       ...this.defaultOptions,
       parent: this.screen,
       label: `GitToken`,
-      height: '20%',
+      height: '10%',
       draggable: false,
       items: views
     },
