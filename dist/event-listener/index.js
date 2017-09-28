@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _stringify = require('babel-runtime/core-js/json/stringify');
-
-var _stringify2 = _interopRequireDefault(_stringify);
-
 var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
@@ -32,7 +28,15 @@ var _handleContribution = require('./handleContribution');
 
 var _handleContribution2 = _interopRequireDefault(_handleContribution);
 
+var _bluebird = require('bluebird');
+
+var _bluebird2 = _interopRequireDefault(_bluebird);
+
+var _index = require('./utils/index');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var jsonfile = (0, _bluebird.promisifyAll)(require('jsonfile'));
 
 var _require = require('gittoken-contracts/build/contracts/GitToken.json'),
     abi = _require.abi,
@@ -48,6 +52,7 @@ var GitTokenTerminalEventListener = function () {
 
     this.contracts = {};
     this.contractEvents = {};
+    this.cacheFile = __dirname + '/../../cache/cache.json';
 
     this.web3Provider = web3Provider ? web3Provider : 'https://torvalds.gittoken.io';
     this.web3 = new _web2.default(new _web2.default.providers.HttpProvider(this.web3Provider));
@@ -55,6 +60,17 @@ var GitTokenTerminalEventListener = function () {
 
     this.handleEvent = _handleEvent2.default.bind(this);
     this.handleContribution = _handleContribution2.default.bind(this);
+    this.ContributionHistory = _index.ContributionHistory.bind(this);
+    this.SupplyGrowth = _index.SupplyGrowth.bind(this);
+    this.TokenSupply = _index.TokenSupply.bind(this);
+    this.cacheState = _index.cacheState.bind(this);
+    this.retrieveState = _index.retrieveState.bind(this);
+
+    this.retrieveState().then(function (state) {
+      // console.log('Retrieved State: ', state)
+    }).catch(function (error) {
+      console.log('error', error);
+    });
 
     process.on('message', function (msg) {
       var _JSON$parse = JSON.parse(msg),
@@ -64,6 +80,7 @@ var GitTokenTerminalEventListener = function () {
       switch (type) {
         case 'WATCH_TOKEN':
           _this.watchToken(data);
+          break;
         default:
           console.log('Invalid ' + type + ' Requested');
           return null;
@@ -71,24 +88,33 @@ var GitTokenTerminalEventListener = function () {
     });
 
     this.store.subscribe(function () {
-      console.log('State: ' + (0, _stringify2.default)(_this.store.getState()));
+      _this.cacheState({
+        data: _this.store.getState()['organizations']
+      }).then(function (cached) {
+        // console.log(cached)
+      }).catch(function (error) {
+        console.log('error');
+      });
     });
   }
 
   (0, _createClass3.default)(GitTokenTerminalEventListener, [{
     key: 'watchToken',
-    value: function watchToken(_ref2) {
+    value: function watchToken(data) {
       var _this2 = this;
 
-      var token = _ref2.token,
-          organization = _ref2.organization;
+      var token = data.token,
+          organization = data.organization,
+          decimals = data.decimals;
+
+
+      var fromBlock = data['fromBlock'] ? data['fromBlock'] : 0;
+      var toBlock = data['toBlock'] ? data['toBlock'] : 'latest';
 
       this.contracts[token] = this.web3.eth.contract(abi).at(token);
-      this.contractEvents[token] = this.contracts[token].allEvents({ fromBlock: 0, toBlock: 'latest' });
+      this.contractEvents[token] = this.contracts[token].allEvents({ fromBlock: fromBlock, toBlock: toBlock });
       this.contractEvents[token].watch(function (error, result) {
-        _this2.handleEvent({ data: result, organization: organization }).then(function (details) {
-          console.log('details', details);
-        }).catch(function (error) {
+        _this2.handleEvent({ data: result, organization: organization, decimals: decimals }).then(function (details) {/*console.log('details', details)*/}).catch(function (error) {
           console.log('error', error);
         });
       });

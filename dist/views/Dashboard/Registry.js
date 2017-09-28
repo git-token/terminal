@@ -24,7 +24,8 @@ function Registry(_ref) {
   var _this = this;
 
   var state = _ref.state;
-  var registered = state.registered;
+  var registered = state.registered,
+      organizations = state.organizations;
 
   var registryRows = function registryRows(_ref2) {
     var registered = _ref2.registered;
@@ -64,14 +65,23 @@ function Registry(_ref) {
     select: function select(item, index) {
       var result = registered[index - 1];
       var organization = result.organization,
-          token_address = result.token_address;
+          token_address = result.token_address,
+          decimals = result.decimals;
 
+
+      var fromBlock = organizations[organization] && organizations[organization]['fromBlock'] ? organizations[organization]['fromBlock'] : 0;
 
       _this.store.dispatch({ type: 'SET_ORGANIZATION', result: result });
       _this.store.dispatch({ type: 'SET_VIEW', result: 'Organization' });
+
       _this.eventListener.send((0, _stringify2.default)({
         type: 'WATCH_TOKEN',
-        data: { organization: organization, token: token_address }
+        data: {
+          organization: organization,
+          token: token_address,
+          decimals: decimals,
+          fromBlock: fromBlock
+        }
       }));
       _this.screen.remove(_this.topnav);
     }

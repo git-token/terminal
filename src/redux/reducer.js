@@ -14,7 +14,7 @@ const INITIAL_STATE = {
 
 export default function reducer(state=INITIAL_STATE, action) {
   switch(action.type) {
-    case 'WATCH_TOKEN':
+    case 'ORGANIZATION_DATA_UPDATE':
 
       state['organizations'][action.org] =
         !state['organizations'][action.org] ? {} :
@@ -34,6 +34,18 @@ export default function reducer(state=INITIAL_STATE, action) {
         }
       }
       break;
+    case 'ORGANIZATION_HIGHEST_BLOCK':
+      return {
+        ...state,
+        organizations: {
+          ...state['organizations'],
+          [action.org]: {
+            ...state['organizations'][action.org],
+            fromBlock: action.data
+          }
+        }
+      }
+      break;
     case 'ORGANIZATION_DATA':
       return {
         ...state,
@@ -43,12 +55,18 @@ export default function reducer(state=INITIAL_STATE, action) {
         }
       }
       break;
+    case 'CACHED_ORGANIZATIONS':
+      return {
+        ...state,
+        organizations: action.data
+      }
+      break;
     case 'SET_ORGANIZATION':
       return {
         ...state,
         currentOrganization: action.result
       }
-    break;
+      break;
     case 'SET_VIEW':
       return {
         ...state,

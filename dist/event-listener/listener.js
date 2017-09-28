@@ -15,7 +15,16 @@ var _child_process = require('child_process');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function listener(_ref) {
+  var _this = this;
+
   (0, _objectDestructuringEmpty3.default)(_ref);
 
   this.eventListener = (0, _child_process.fork)('./dist/event-listener/server.js');
+  this.eventListener.on('message', function (msg) {
+    _this.store.dispatch(msg);
+  });
+
+  process.on('exit', function () {
+    _this.eventListener.kill();
+  });
 }

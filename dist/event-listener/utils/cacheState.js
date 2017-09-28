@@ -3,7 +3,12 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = handleContribution;
+
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+exports.default = cacheState;
 
 var _bluebird = require('bluebird');
 
@@ -11,17 +16,15 @@ var _bluebird2 = _interopRequireDefault(_bluebird);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function handleContribution(_ref) {
+var jsonfile = (0, _bluebird.promisifyAll)(require('jsonfile'));
+
+function cacheState(_ref) {
   var _this = this;
 
-  var data = _ref.data,
-      organization = _ref.organization,
-      decimals = _ref.decimals;
+  var data = _ref.data;
 
   return new _bluebird2.default(function (resolve, reject) {
-    (0, _bluebird.join)(
-    // this.ContributionHistory({ data, organization, decimals }),
-    _this.SupplyGrowth({ data: data, organization: organization, decimals: decimals })).then(function () {
+    jsonfile.writeFileAsync(_this.cacheFile, JSON.parse((0, _stringify2.default)(data)), { flag: 'w' }).then(function () {
       resolve(true);
     }).catch(function (error) {
       reject(error);

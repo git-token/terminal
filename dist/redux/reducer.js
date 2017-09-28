@@ -8,9 +8,9 @@ var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
 
 var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
-var _extends6 = require('babel-runtime/helpers/extends');
+var _extends7 = require('babel-runtime/helpers/extends');
 
-var _extends7 = _interopRequireDefault(_extends6);
+var _extends8 = _interopRequireDefault(_extends7);
 
 exports.default = reducer;
 
@@ -29,31 +29,43 @@ function reducer() {
   var action = arguments[1];
 
   switch (action.type) {
-    case 'WATCH_TOKEN':
+    case 'ORGANIZATION_DATA_UPDATE':
 
       state['organizations'][action.org] = !state['organizations'][action.org] ? {} : state['organizations'][action.org];
 
-      return (0, _extends7.default)({}, state, {
-        organizations: (0, _extends7.default)({}, state['organizations'], (0, _defineProperty3.default)({}, action.org, (0, _extends7.default)({}, state['organizations'][action.org], (0, _defineProperty3.default)({}, action.event, (0, _extends7.default)({}, state['organizations'][action.org][action.event], (0, _defineProperty3.default)({}, action.id, action.data))))))
+      return (0, _extends8.default)({}, state, {
+        organizations: (0, _extends8.default)({}, state['organizations'], (0, _defineProperty3.default)({}, action.org, (0, _extends8.default)({}, state['organizations'][action.org], (0, _defineProperty3.default)({}, action.event, (0, _extends8.default)({}, state['organizations'][action.org][action.event], (0, _defineProperty3.default)({}, action.id, action.data))))))
+      });
+      break;
+    case 'ORGANIZATION_HIGHEST_BLOCK':
+      return (0, _extends8.default)({}, state, {
+        organizations: (0, _extends8.default)({}, state['organizations'], (0, _defineProperty3.default)({}, action.org, (0, _extends8.default)({}, state['organizations'][action.org], {
+          fromBlock: action.data
+        })))
       });
       break;
     case 'ORGANIZATION_DATA':
-      return (0, _extends7.default)({}, state, {
-        organizations: (0, _extends7.default)({}, state['organizations'], (0, _defineProperty3.default)({}, action.org, action.data))
+      return (0, _extends8.default)({}, state, {
+        organizations: (0, _extends8.default)({}, state['organizations'], (0, _defineProperty3.default)({}, action.org, action.data))
+      });
+      break;
+    case 'CACHED_ORGANIZATIONS':
+      return (0, _extends8.default)({}, state, {
+        organizations: action.data
       });
       break;
     case 'SET_ORGANIZATION':
-      return (0, _extends7.default)({}, state, {
+      return (0, _extends8.default)({}, state, {
         currentOrganization: action.result
       });
       break;
     case 'SET_VIEW':
-      return (0, _extends7.default)({}, state, {
+      return (0, _extends8.default)({}, state, {
         currentView: action.result
       });
       break;
     case 'GET_REGISTERED':
-      return (0, _extends7.default)({}, state, {
+      return (0, _extends8.default)({}, state, {
         registered: action.result
       });
       break;

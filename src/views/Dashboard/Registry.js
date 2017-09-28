@@ -1,5 +1,5 @@
 export default function Registry({ state }) {
-  const { registered } = state
+  const { registered, organizations } = state
   const registryRows = ({ registered }) => {
     const items = registered.filter((item) => {
       const { deployed } = item
@@ -42,13 +42,25 @@ export default function Registry({ state }) {
     },
     select: (item, index) => {
       const result = registered[index - 1]
-      const { organization, token_address } = result
+      const { organization, token_address, decimals } = result
+
+      const fromBlock =
+        organizations[organization] &&
+        organizations[organization]['fromBlock'] ?
+          organizations[organization]['fromBlock'] : 0
 
       this.store.dispatch({ type: 'SET_ORGANIZATION', result  })
       this.store.dispatch({ type: 'SET_VIEW', result: 'Organization'  })
+
+
       this.eventListener.send(JSON.stringify({
         type: 'WATCH_TOKEN',
-        data: { organization, token: token_address }
+        data: {
+          organization,
+          token: token_address,
+          decimals,
+          fromBlock
+        }
       }))
       this.screen.remove(this.topnav)
     }

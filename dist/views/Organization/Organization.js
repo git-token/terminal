@@ -44,97 +44,105 @@ function Organization(_ref) {
       decimals = currentOrganization.decimals;
 
 
-  this.screen.remove(this.registry);
-  this.orgDetails ? this.screen.remove(this.orgDetails) : null;
-  this.leaderBoard ? this.screen.remove(this.leaderBoard) : null;
-  this.contributionHistory ? this.screen.remove(this.contributionHistory) : null;
-  this.supplyChart ? this.screen.remove(this.supplyChart) : null;
+  if (organizations[organization] && organizations[organization]['Contribution'] && organizations[organization]['TokenSupply'] && organizations[organization]['SupplyGrowth']) {
+    var _organizations$organi = organizations[organization],
+        Contribution = _organizations$organi.Contribution,
+        TokenSupply = _organizations$organi.TokenSupply,
+        SupplyGrowth = _organizations$organi.SupplyGrowth;
 
-  this.orgDetails = this.Table({
-    options: (0, _extends3.default)({
-      parent: this.screen,
-      label: 'Details for ' + organization,
-      top: '10%',
-      height: '20%',
-      width: '33%',
-      align: 'left'
-    }, this.defaultOptions, {
-      rows: [['Organization', 'https://github.com/' + organization], ['Token Address', token_address], ['Token Symbol', symbol], ['Token Name', name], ['Token Decimals', String(decimals)], ['Token Supply', String(0)], ['']]
-    })
-  });
+    // console.log('SupplyGrowth', SupplyGrowth)
 
-  this.leaderBoard = this.Table({
-    options: (0, _extends3.default)({
-      parent: this.screen,
-      label: 'Leader Board for ' + organization,
-      top: '30%',
-      height: '20%',
-      width: '33%',
-      align: 'left'
-    }, this.defaultOptions, {
-      rows: [['Username', symbol + ' Balance', 'Percentage Contributed']]
-    })
-  });
+    this.screen.remove(this.registry);
+    this.orgDetails ? this.screen.remove(this.orgDetails) : null;
+    this.leaderBoard ? this.screen.remove(this.leaderBoard) : null;
+    this.contributionHistory ? this.screen.remove(this.contributionHistory) : null;
+    this.supplyChart ? this.screen.remove(this.supplyChart) : null;
 
-  var contributionHistory = [];
-  if (organizations[organization] && organizations[organization]['Contribution']) {
-    var Contribution = organizations[organization].Contribution;
+    this.orgDetails = this.Table({
+      options: (0, _extends3.default)({
+        parent: this.screen,
+        label: 'Details for ' + organization,
+        top: '10%',
+        height: '20%',
+        width: '33%',
+        align: 'left'
+      }, this.defaultOptions, {
+        rows: [['Organization', 'https://github.com/' + organization], ['Token Address', token_address], ['Token Symbol', symbol], ['Token Name', name], ['Token Decimals', String(decimals)], ['Token Supply', String(TokenSupply.total / Math.pow(10, decimals))], ['']]
+      })
+    });
 
+    this.leaderBoard = this.Table({
+      options: (0, _extends3.default)({
+        parent: this.screen,
+        label: 'Leader Board for ' + organization,
+        top: '30%',
+        height: '20%',
+        width: '33%',
+        align: 'left'
+      }, this.defaultOptions, {
+        rows: [['Username', symbol + ' Balance', 'Percentage Contributed']]
+      })
+    });
 
-    contributionHistory = (0, _keys2.default)(Contribution).sort(function (a, b) {
-      return Contribution[b]['data']['date'] - Contribution[a]['data']['date'];
+    var contributionHistory = (0, _keys2.default)(Contribution).sort(function (a, b) {
+      return Contribution[b]['args']['date'] - Contribution[a]['args']['date'];
     }).filter(function (c, i) {
-      if (i < 25) {
+      if (Contribution[c] && i < 50) {
         return true;
       }
     }).map(function (c) {
-      var _Contribution$c$data = Contribution[c].data,
-          username = _Contribution$c$data.username,
-          rewardType = _Contribution$c$data.rewardType,
-          reservedType = _Contribution$c$data.reservedType,
-          value = _Contribution$c$data.value,
-          date = _Contribution$c$data.date;
+      var _Contribution$c$args = Contribution[c]['args'],
+          username = _Contribution$c$args.username,
+          rewardType = _Contribution$c$args.rewardType,
+          reservedType = _Contribution$c$args.reservedType,
+          value = _Contribution$c$args.value,
+          date = _Contribution$c$args.date;
 
       return [String(username), String(rewardType + ' ' + reservedType), String(value / Math.pow(10, decimals)), String(new Date(date * 1000).toLocaleString())];
     });
+
+    this.contributionHistory = this.Table({
+      options: (0, _extends3.default)({
+        parent: this.screen,
+        label: 'Contribution History for ' + organization,
+        top: '50%',
+        height: '50%',
+        width: '33%',
+        align: 'left'
+      }, this.defaultOptions, {
+        rows: [['Username', 'Type', symbol + ' Awarded', 'Date']].concat((0, _toConsumableArray3.default)(contributionHistory))
+      })
+    });
+
+    this.supplyChart = _blessedContrib2.default.line((0, _extends3.default)({}, this.defaultOptions, {
+      xLabelPadding: 10,
+      xPadding: 5,
+      showLegend: true,
+      top: '10%',
+      left: '33%',
+      height: '40%',
+      width: '67%',
+      wholeNumbersOnly: true,
+      label: 'Supply of ' + symbol + ' Token'
+    }));
+
+    this.screen.append(this.supplyChart);
+
+    var totalSupply = {
+      title: '' + symbol,
+      x: (0, _keys2.default)(SupplyGrowth).map(function (s) {
+        return new Date(SupplyGrowth[s].date).toDateString();
+      }),
+      y: (0, _keys2.default)(SupplyGrowth).map(function (s) {
+        return SupplyGrowth[s]['value']['total'] / Math.pow(10, decimals);
+      })
+    };
+
+    this.supplyChart.setData(totalSupply);
+
+    this.screen.append(this.orgDetails);
+    this.screen.append(this.leaderBoard);
+    this.screen.append(this.contributionHistory);
+    this.screen.render();
   }
-
-  this.contributionHistory = this.Table({
-    options: (0, _extends3.default)({
-      parent: this.screen,
-      label: 'Contribution History for ' + organization,
-      top: '50%',
-      height: '50%',
-      width: '33%',
-      align: 'left'
-    }, this.defaultOptions, {
-      rows: [['Username', 'Type', symbol + ' Awarded', 'Date']].concat((0, _toConsumableArray3.default)(contributionHistory))
-    })
-  });
-
-  this.supplyChart = _blessedContrib2.default.line((0, _extends3.default)({}, this.defaultOptions, {
-    xLabelPadding: 10,
-    xPadding: 5,
-    showLegend: true,
-    top: '10%',
-    left: '33%',
-    height: '41%',
-    width: '67%',
-    wholeNumbersOnly: true,
-    label: 'Supply of ' + symbol + ' Token'
-  }));
-
-  this.screen.append(this.supplyChart);
-  this.supplySeries = {
-    title: '' + symbol,
-    x: ['100', '200', '300', '400'],
-    y: [1, 8, 3, 4]
-  };
-
-  this.supplyChart.setData(this.supplySeries);
-
-  this.screen.append(this.orgDetails);
-  this.screen.append(this.leaderBoard);
-  this.screen.append(this.contributionHistory);
-  this.screen.render();
 }
