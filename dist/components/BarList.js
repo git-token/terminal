@@ -22,5 +22,6 @@ function List(_ref) {
 
   var list = _blessed2.default.listbar((0, _extends3.default)({}, options));
   list.on('select', select);
+
   return list;
 }

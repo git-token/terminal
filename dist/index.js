@@ -40,6 +40,10 @@ var _Welcome = require('./views/Welcome');
 
 var _Welcome2 = _interopRequireDefault(_Welcome);
 
+var _listener = require('./event-listener/listener');
+
+var _listener2 = _interopRequireDefault(_listener);
+
 var _client = require('gittoken-socket/dist/client');
 
 var _client2 = _interopRequireDefault(_client);
@@ -48,7 +52,7 @@ var _defaultOptions = require('./components/defaultOptions');
 
 var _defaultOptions2 = _interopRequireDefault(_defaultOptions);
 
-var _store = require('./store');
+var _store = require('./redux/store');
 
 var _store2 = _interopRequireDefault(_store);
 
@@ -59,9 +63,11 @@ var GitTokenTerminal = function () {
     var _this = this;
 
     var title = _ref.title,
-        socketUri = _ref.socketUri;
+        socketUri = _ref.socketUri,
+        web3Provider = _ref.web3Provider;
     (0, _classCallCheck3.default)(this, GitTokenTerminal);
 
+    this.web3Provider = web3Provider ? web3Provider : 'https://torvalds.gittoken.io';
     this.screen = _blessed2.default.screen({
       title: title,
       smartCSR: true,
@@ -95,6 +101,9 @@ var GitTokenTerminal = function () {
       return process.exit(0);
     });
 
+    this.listener = _listener2.default.bind(this);
+    this.listener({});
+
     // Connect To GitToken WebSocket Server
     this.websocket = new _client2.default({ socketUri: socketUri });
     this.websocket.on('connect', function () {
@@ -104,11 +113,11 @@ var GitTokenTerminal = function () {
 
     this.websocket.on('data', function (data) {
       var msg = JSON.parse(data.toString('utf8'));
-      _this.store.dispatch(msg);
+      // this.store.dispatch(msg)
       // console.log('msg', msg)
-      // if(msg.type == 'GET_REGISTERED') {
-      //   this.store.dispatch(msg)
-      // }
+      if (msg.type == 'GET_REGISTERED') {
+        _this.store.dispatch(msg);
+      }
     });
 
     // Render the screen.

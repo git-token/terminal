@@ -19,16 +19,10 @@ function subscribe(_ref) {
       token = _ref.token;
 
   return function (dispatch) {
-    _this.websocket.socket.send((0, _stringify2.default)({
+    console.log('this.eventListener.connected', _this.eventListener.connected);
+    _this.eventListener.write((0, _stringify2.default)({
       event: 'watch_token',
-      data: {
-        organization: organization,
-        token: token
-      }
+      data: { organization: organization, token: token }
     }));
-
-    _this.websocket.on('data', function (msg) {
-      console.log('msg', msg);
-    });
   };
 }

@@ -3,9 +3,10 @@ const INITIAL_STATE = {
     'Registry',
     'Torvalds Network',
     'Account',
-    'Exchange'
+    'Exchange',
+    'Home'
   ],
-  currentView: 'Welcome',
+  currentView: 'Home',
   currentOrganization: {},
   registered: [],
   organizations: {}

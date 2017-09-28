@@ -27,8 +27,18 @@ function TopNav(_ref) {
       items: views
     }),
     select: function select(item, index) {
-      _this.store.dispatch({ type: 'SET_VIEW', result: views[index] });
+      // disabled
+      // this.store.dispatch({ type: 'SET_VIEW', views[index] })
     }
   });
+
+  this.topnav.key(views.map(function (v, i) {
+    return String(i + 1);
+  }), function (v, key) {
+    var result = views[+v - 1];
+    _this.store.dispatch({ type: 'SET_VIEW', result: result });
+  });
+
+  this.screen.append(this.topnav);
   this.screen.render();
 }

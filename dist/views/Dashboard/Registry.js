@@ -69,7 +69,7 @@ function Registry(_ref) {
 
       _this.store.dispatch({ type: 'SET_ORGANIZATION', result: result });
       _this.store.dispatch({ type: 'SET_VIEW', result: 'Organization' });
-      _this.websocket.socket.send((0, _stringify2.default)({
+      _this.eventListener.send((0, _stringify2.default)({
         type: 'WATCH_TOKEN',
         data: { organization: organization, token: token_address }
       }));

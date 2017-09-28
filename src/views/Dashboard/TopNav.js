@@ -10,8 +10,16 @@ export default function TopNav({ state }) {
       items: views
     },
     select: (item, index) => {
-      this.store.dispatch({ type: 'SET_VIEW', result: views[index] })
+      // disabled
+      // this.store.dispatch({ type: 'SET_VIEW', views[index] })
     }
   })
+
+  this.topnav.key(views.map((v, i) => { return String(i+1) }), (v, key) => {
+    const result = views[+v-1]
+    this.store.dispatch({ type: 'SET_VIEW', result })
+  })
+
+  this.screen.append(this.topnav)
   this.screen.render()
 }

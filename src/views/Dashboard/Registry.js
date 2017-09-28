@@ -46,7 +46,7 @@ export default function Registry({ state }) {
 
       this.store.dispatch({ type: 'SET_ORGANIZATION', result  })
       this.store.dispatch({ type: 'SET_VIEW', result: 'Organization'  })
-      this.websocket.socket.send(JSON.stringify({
+      this.eventListener.send(JSON.stringify({
         type: 'WATCH_TOKEN',
         data: { organization, token: token_address }
       }))

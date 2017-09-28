@@ -1,15 +1,9 @@
 export default function subscribe({ organization, token }) {
   return (dispatch) => {
-    this.websocket.socket.send(JSON.stringify({
+    console.log('this.eventListener.connected', this.eventListener.connected)
+    this.eventListener.write(JSON.stringify({
       event: 'watch_token',
-      data: {
-        organization,
-        token
-      }
+      data: { organization, token }
     }))
-
-    this.websocket.on('data', (msg) => {
-      console.log('msg', msg)
-    })
   }
 }
