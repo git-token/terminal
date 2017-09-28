@@ -4,5 +4,6 @@ GitToken Terminal is a terminal interface for viewing and analyzing tokenized pr
 
 ## Using GitToken Terminal
 
-npm install git-token@alpha
-git token terminal
+1) `npm install git-token@alpha`
+
+2) `git token terminal`
