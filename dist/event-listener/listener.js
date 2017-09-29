@@ -19,7 +19,7 @@ function listener(_ref) {
 
   (0, _objectDestructuringEmpty3.default)(_ref);
 
-  this.eventListener = (0, _child_process.fork)('./dist/event-listener/server.js');
+  this.eventListener = (0, _child_process.fork)(__dirname + '/../../dist/event-listener/server.js');
   this.eventListener.on('message', function (msg) {
     _this.store.dispatch(msg);
   });
