@@ -18,3 +18,5 @@ The GitToken Terminal provides a terminal interface for reviewing and interactin
 ### Run GitToken Terminal
 
 `git token terminal`
+
+![terminal](https://github.com/git-token/media/blob/master/png/terminal_alpha.png?raw=true)
