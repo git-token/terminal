@@ -33,9 +33,10 @@ function Leaderboard(_ref) {
     _bluebird2.default.resolve((0, _keys2.default)(Contribution)).map(function (c) {
       var _Contribution$c$args = Contribution[c]['args'],
           username = _Contribution$c$args.username,
-          value = _Contribution$c$args.value;
+          value = _Contribution$c$args.value,
+          reservedValue = _Contribution$c$args.reservedValue;
 
-      leaderboard['total'] ? leaderboard['total'] += Number(value) : leaderboard['total'] = Number(value);
+      leaderboard['total'] ? leaderboard['total'] += Number(+value + +reservedValue) : leaderboard['total'] = Number(+value + +reservedValue);
 
       leaderboard[username] ? leaderboard[username] += Number(value) : leaderboard[username] = Number(value);
     }).then(function () {

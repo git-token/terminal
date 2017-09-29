@@ -7,10 +7,10 @@ export default function Leaderboard({ data, organization }) {
 
     let leaderboard = {}
     Promise.resolve(Object.keys(Contribution)).map((c) => {
-      const { username, value } = Contribution[c]['args']
+      const { username, value, reservedValue } = Contribution[c]['args']
       leaderboard['total'] ?
-        leaderboard['total'] += Number(value) :
-        leaderboard['total'] = Number(value)
+        leaderboard['total'] += Number(+value + +reservedValue) :
+        leaderboard['total'] = Number(+value + +reservedValue)
 
       leaderboard[username] ?
         leaderboard[username] += Number(value) :

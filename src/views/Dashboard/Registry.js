@@ -15,12 +15,13 @@ export default function Registry({ state }) {
         String(organization),
         String(token_address),
         String(name),
-        String(symbol)
+        String(symbol),
+        String(`https://GitHub.com/${organization}`)
       ]
     })
 
     const rows = [
-      ['Organization', 'Token Address', 'Token Name', 'Symbol'],
+      ['Organization', 'Token Address', 'Token Name', 'Symbol', 'GitHub'],
       ...items
     ]
 

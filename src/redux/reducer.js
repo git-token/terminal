@@ -1,10 +1,10 @@
 const INITIAL_STATE = {
   views: [
-    'Registry',
-    'Torvalds Network',
+    'Home',
     'Account',
+    'Registry',
     'Exchange',
-    'Home'
+    'Torvalds Network'
   ],
   currentView: 'Home',
   currentOrganization: {},

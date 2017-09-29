@@ -52,10 +52,13 @@ function Organization(_ref) {
 
 
     this.screen.remove(this.registry);
+
+    this.auctions ? this.screen.remove(this.auctions) : null;
     this.orgDetails ? this.screen.remove(this.orgDetails) : null;
-    this.leaderBoard ? this.screen.remove(this.leaderBoard) : null;
-    this.contributionHistory ? this.screen.remove(this.contributionHistory) : null;
     this.supplyChart ? this.screen.remove(this.supplyChart) : null;
+    this.leaderBoard ? this.screen.remove(this.leaderBoard) : null;
+    this.milestones ? this.milestones.remove(this.milestones) : null;
+    this.contributionHistory ? this.screen.remove(this.contributionHistory) : null;
 
     this.orgDetails = this.Table({
       options: (0, _extends3.default)({
@@ -76,8 +79,8 @@ function Organization(_ref) {
       options: (0, _extends3.default)({
         parent: this.screen,
         label: 'Leader Board for ' + organization,
-        top: '30%',
-        height: '20%',
+        top: '29%',
+        height: '21%',
         width: '33%',
         align: 'left'
       }, this.defaultOptions, {
@@ -95,7 +98,7 @@ function Organization(_ref) {
     var contributionHistory = (0, _keys2.default)(Contribution).sort(function (a, b) {
       return Contribution[b]['args']['date'] - Contribution[a]['args']['date'];
     }).filter(function (c, i) {
-      if (Contribution[c] && i < 50) {
+      if (Contribution[c]) {
         return true;
       }
     }).map(function (c) {
@@ -104,22 +107,52 @@ function Organization(_ref) {
           rewardType = _Contribution$c$args.rewardType,
           reservedType = _Contribution$c$args.reservedType,
           value = _Contribution$c$args.value,
+          reservedValue = _Contribution$c$args.reservedValue,
           date = _Contribution$c$args.date;
 
-      return [String(username), String(rewardType + ' ' + reservedType), String(value / Math.pow(10, decimals)), String(new Date(date * 1000).toLocaleString())];
+      return [String(username), String(rewardType + ' ' + reservedType), String(value / Math.pow(10, decimals)), String(reservedValue / Math.pow(10, decimals)), String(new Date(date * 1000).toLocaleString())];
     });
 
     this.contributionHistory = this.Table({
       options: (0, _extends3.default)({
         parent: this.screen,
         label: 'Contribution History for ' + organization,
-        top: '50%',
-        height: '50%',
+        top: '49%',
+        height: '51%',
+        width: '67%',
+        left: '33%',
+        align: 'left'
+      }, this.defaultOptions, {
+        rows: [['Username', 'Type', symbol + ' Rewarded', symbol + ' Reserved', 'Date']].concat((0, _toConsumableArray3.default)(contributionHistory))
+      })
+    });
+
+    this.milestones = this.Table({
+      options: (0, _extends3.default)({
+        parent: this.screen,
+        label: 'Milestones for ' + organization,
+        top: '49%',
+        height: '21%',
         width: '33%',
         align: 'left'
       }, this.defaultOptions, {
-        rows: [['Username', 'Type', symbol + ' Awarded', 'Date']].concat((0, _toConsumableArray3.default)(contributionHistory))
-      })
+        rows: [['Title', 'Completion Date']]
+      }),
+      select: function select(item, index) {}
+    });
+
+    this.auctions = this.Table({
+      options: (0, _extends3.default)({
+        parent: this.screen,
+        label: symbol + ' Auctions for ' + organization,
+        top: '69%',
+        height: '31%',
+        width: '33%',
+        align: 'left'
+      }, this.defaultOptions, {
+        rows: [['Initial Exchange Rate', symbol + ' Available', 'Auction Date']]
+      }),
+      select: function select(item, index) {}
     });
 
     this.supplyChart = _blessedContrib2.default.line((0, _extends3.default)({}, this.defaultOptions, {
@@ -131,7 +164,7 @@ function Organization(_ref) {
       height: '40%',
       width: '67%',
       wholeNumbersOnly: true,
-      label: 'Supply of ' + symbol + ' Token'
+      label: 'Supply of ' + symbol + ' Token | ' + Number(TokenSupply.total / Math.pow(10, decimals)).toLocaleString() + ' ' + symbol
     }));
 
     this.screen.append(this.supplyChart);
@@ -179,6 +212,8 @@ function Organization(_ref) {
     this.screen.append(this.orgDetails);
     this.screen.append(this.leaderBoard);
     this.screen.append(this.contributionHistory);
+    this.screen.append(this.auctions);
+    this.screen.append(this.milestones);
     this.screen.render();
   }
 }

@@ -42,10 +42,10 @@ function Registry(_ref) {
           name = item.name,
           symbol = item.symbol;
 
-      return [String(organization), String(token_address), String(name), String(symbol)];
+      return [String(organization), String(token_address), String(name), String(symbol), String('https://GitHub.com/' + organization)];
     });
 
-    var rows = [['Organization', 'Token Address', 'Token Name', 'Symbol']].concat((0, _toConsumableArray3.default)(items));
+    var rows = [['Organization', 'Token Address', 'Token Name', 'Symbol', 'GitHub']].concat((0, _toConsumableArray3.default)(items));
 
     return rows;
   };

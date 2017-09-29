@@ -17,7 +17,7 @@ exports.default = reducer;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var INITIAL_STATE = {
-  views: ['Registry', 'Torvalds Network', 'Account', 'Exchange', 'Home'],
+  views: ['Home', 'Account', 'Registry', 'Exchange', 'Torvalds Network'],
   currentView: 'Home',
   currentOrganization: {},
   registered: [],
