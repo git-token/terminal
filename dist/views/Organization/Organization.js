@@ -67,8 +67,8 @@ function Organization(_ref) {
         align: 'left'
       }, this.defaultOptions, {
         rows: [['Organization', 'https://github.com/' + organization], ['Token Address', token_address], ['Token Symbol', symbol], ['Token Name', name],
-        // ['Token Decimals',  String(decimals) ],
-        ['Token Supply', Number(TokenSupply.total / Math.pow(10, decimals)).toLocaleString() + ' ' + symbol], ['']]
+        // ['Token Decimals',     String(decimals) ],
+        ['Total Token Supply', Number(TokenSupply.total / Math.pow(10, decimals)).toLocaleString() + ' ' + symbol], ['Reserved Token Supply', Number(TokenSupply.reserved / Math.pow(10, decimals)).toLocaleString() + ' ' + symbol], ['Reserved Ratio', Number(TokenSupply.reserved / TokenSupply.total * 100).toFixed(3) + ' %']]
       })
     });
 
@@ -167,7 +167,7 @@ function Organization(_ref) {
       y: (0, _keys2.default)(Contribution).sort(function (a, b) {
         return Contribution[a]['args']['date'] - Contribution[a]['args']['date'];
       }).map(function (s) {
-        var v = Contribution[s]['args']['value'] / Math.pow(10, decimals);
+        var v = Contribution[s]['args']['reservedValue'] / Math.pow(10, decimals);
         rS = rS + v;
         return rS;
       }),

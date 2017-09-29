@@ -42,13 +42,14 @@ export default function Organization({ state }) {
         align: 'left',
         ...this.defaultOptions,
         rows: [
-          ['Organization',    `https://github.com/${organization}` ],
-          ['Token Address',   token_address ],
-          ['Token Symbol',    symbol ],
-          ['Token Name',      name ],
-          // ['Token Decimals',  String(decimals) ],
-          ['Token Supply',    `${Number(TokenSupply.total / Math.pow(10, decimals)).toLocaleString()} ${symbol}` ],
-          ['']
+          ['Organization',          `https://github.com/${organization}` ],
+          ['Token Address',         token_address ],
+          ['Token Symbol',          symbol ],
+          ['Token Name',            name ],
+          // ['Token Decimals',     String(decimals) ],
+          ['Total Token Supply',    `${Number(TokenSupply.total / Math.pow(10, decimals)).toLocaleString()} ${symbol}` ],
+          ['Reserved Token Supply', `${Number(TokenSupply.reserved / Math.pow(10, decimals)).toLocaleString()} ${symbol}` ],
+          ['Reserved Ratio', `${Number((TokenSupply.reserved/TokenSupply.total) * 100).toFixed(3)} %` ]
         ],
       }
     });
@@ -162,7 +163,7 @@ export default function Organization({ state }) {
       y: Object.keys(Contribution).sort((a,b) => {
         return Contribution[a]['args']['date'] - Contribution[a]['args']['date']
       }).map((s) => {
-        let v = (Contribution[s]['args']['value']) / Math.pow(10, decimals)
+        let v = (Contribution[s]['args']['reservedValue']) / Math.pow(10, decimals)
         rS = rS + v
         return rS
       }),
