@@ -2,12 +2,12 @@ import SupplyGrowth from './SupplyGrowth'
 import TokenSupply from './TokenSupply'
 import cacheState from './cacheState'
 import retrieveState from './retrieveState'
-import ContributionHistory from './ContributionHistory'
+import Leaderboard from './Leaderboard'
 
 export {
   SupplyGrowth,
   TokenSupply,
   cacheState,
   retrieveState,
-  ContributionHistory
+  Leaderboard
 }

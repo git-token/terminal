@@ -22,7 +22,7 @@ var options = {
       bg: '#17082b'
     },
     line: 202,
-    text: 202
+    text: 15
   },
   // Allow mouse support
   mouse: true,

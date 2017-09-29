@@ -21,7 +21,9 @@ function handleContribution(_ref) {
   return new _bluebird2.default(function (resolve, reject) {
     (0, _bluebird.join)(
     // this.ContributionHistory({ data, organization, decimals }),
-    _this.SupplyGrowth({ data: data, organization: organization, decimals: decimals })).then(function () {
+    _this.TokenSupply({ organization: organization, decimals: decimals }),
+    // this.SupplyGrowth({ data, organization, decimals }),
+    _this.Leaderboard({ data: data, organization: organization })).then(function () {
       resolve(true);
     }).catch(function (error) {
       reject(error);

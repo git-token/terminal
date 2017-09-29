@@ -1,29 +1,25 @@
 import Promise from 'bluebird'
 
-export default function TokenSupply({ data, organization }) {
+export default function TokenSupply({ organization }) {
   return new Promise((resolve, reject) => {
     try {
-      const { args: { value, reservedValue, date }, transactionHash } = data
-
       const { organizations } = this.store.getState()
+      const { Contribution } = organizations[organization]
 
-      let total, reserved;
+      const total = Object.keys(Contribution).map((c) => {
+        const { value, reservedValue } = Contribution[c]['args']
+        return Number(+value + +reservedValue)
+      }).reduce((t, v) => {
+        return t + v
+      })
 
-      if (
-        organizations[organization] &&
-        organizations[organization]['TokenSupply']
-      ) {
-        total =
-          organizations[organization]['TokenSupply'].total +
-          Number(value.toNumber() + reservedValue.toNumber());
+      const reserved = Object.keys(Contribution).map((c) => {
+        const { value, reservedValue } = Contribution[c]['args']
+        return Number(reservedValue)
+      }).reduce((t, v) => {
+        return t + v
+      })
 
-        reserved =
-          organizations[organization]['TokenSupply'].reserved +
-          Number(reservedValue.toNumber());
-      } else {
-        total = Number(value.toNumber() + reservedValue.toNumber());
-        reserved = Number(reservedValue.toNumber());
-      }
 
       const payloadTotal = {
         type: 'ORGANIZATION_DATA_UPDATE',
@@ -47,14 +43,7 @@ export default function TokenSupply({ data, organization }) {
       process.send(payloadTotal)
       process.send(payloadReserved)
 
-      resolve({
-        date: new Date(date.toNumber() * 1000).getTime(),
-        organization,
-        value: {
-          total,
-          reserved
-        }
-      })
+      resolve(true)
 
     } catch (error) {
       reject(error)

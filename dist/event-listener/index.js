@@ -60,9 +60,9 @@ var GitTokenTerminalEventListener = function () {
 
     this.handleEvent = _handleEvent2.default.bind(this);
     this.handleContribution = _handleContribution2.default.bind(this);
-    this.ContributionHistory = _index.ContributionHistory.bind(this);
     this.SupplyGrowth = _index.SupplyGrowth.bind(this);
     this.TokenSupply = _index.TokenSupply.bind(this);
+    this.Leaderboard = _index.Leaderboard.bind(this);
     this.cacheState = _index.cacheState.bind(this);
     this.retrieveState = _index.retrieveState.bind(this);
 

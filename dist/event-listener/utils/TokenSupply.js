@@ -3,6 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _keys = require('babel-runtime/core-js/object/keys');
+
+var _keys2 = _interopRequireDefault(_keys);
+
 exports.default = TokenSupply;
 
 var _bluebird = require('bluebird');
@@ -14,31 +19,35 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function TokenSupply(_ref) {
   var _this = this;
 
-  var data = _ref.data,
-      organization = _ref.organization;
+  var organization = _ref.organization;
 
   return new _bluebird2.default(function (resolve, reject) {
     try {
-      var _data$args = data.args,
-          value = _data$args.value,
-          reservedValue = _data$args.reservedValue,
-          date = _data$args.date,
-          transactionHash = data.transactionHash;
-
       var _store$getState = _this.store.getState(),
           organizations = _store$getState.organizations;
 
-      var total = void 0,
-          reserved = void 0;
+      var Contribution = organizations[organization].Contribution;
 
-      if (organizations[organization] && organizations[organization]['TokenSupply']) {
-        total = organizations[organization]['TokenSupply'].total + Number(value.toNumber() + reservedValue.toNumber());
 
-        reserved = organizations[organization]['TokenSupply'].reserved + Number(reservedValue.toNumber());
-      } else {
-        total = Number(value.toNumber() + reservedValue.toNumber());
-        reserved = Number(reservedValue.toNumber());
-      }
+      var total = (0, _keys2.default)(Contribution).map(function (c) {
+        var _Contribution$c$args = Contribution[c]['args'],
+            value = _Contribution$c$args.value,
+            reservedValue = _Contribution$c$args.reservedValue;
+
+        return Number(+value + +reservedValue);
+      }).reduce(function (t, v) {
+        return t + v;
+      });
+
+      var reserved = (0, _keys2.default)(Contribution).map(function (c) {
+        var _Contribution$c$args2 = Contribution[c]['args'],
+            value = _Contribution$c$args2.value,
+            reservedValue = _Contribution$c$args2.reservedValue;
+
+        return Number(reservedValue);
+      }).reduce(function (t, v) {
+        return t + v;
+      });
 
       var payloadTotal = {
         type: 'ORGANIZATION_DATA_UPDATE',
@@ -62,14 +71,7 @@ function TokenSupply(_ref) {
       process.send(payloadTotal);
       process.send(payloadReserved);
 
-      resolve({
-        date: new Date(date.toNumber() * 1000).getTime(),
-        organization: organization,
-        value: {
-          total: total,
-          reserved: reserved
-        }
-      });
+      resolve(true);
     } catch (error) {
       reject(error);
     }

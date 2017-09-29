@@ -21,12 +21,10 @@ export default function Organization({ state }) {
     organizations[organization] &&
     organizations[organization]['Contribution'] &&
     organizations[organization]['TokenSupply'] &&
-    organizations[organization]['SupplyGrowth']
+    organizations[organization]['Leaderboard']
   ) {
 
-    const { Contribution, TokenSupply, SupplyGrowth } = organizations[organization]
-
-    // console.log('SupplyGrowth', SupplyGrowth)
+    const { Contribution, TokenSupply, Leaderboard } = organizations[organization]
 
     this.screen.remove(this.registry)
     this.orgDetails ? this.screen.remove(this.orgDetails) : null
@@ -48,8 +46,8 @@ export default function Organization({ state }) {
           ['Token Address',   token_address ],
           ['Token Symbol',    symbol ],
           ['Token Name',      name ],
-          ['Token Decimals',  String(decimals) ],
-          ['Token Supply',    String(TokenSupply.total / Math.pow(10, decimals)) ],
+          // ['Token Decimals',  String(decimals) ],
+          ['Token Supply',    `${Number(TokenSupply.total / Math.pow(10, decimals)).toLocaleString()} ${symbol}` ],
           ['']
         ],
       }
@@ -65,7 +63,19 @@ export default function Organization({ state }) {
         align: 'left',
         ...this.defaultOptions,
         rows: [
-          ['Username', `${symbol} Balance`, `Percentage Contributed`]
+          ['Username', `${symbol} Balance`, `Percentage Tokens Awarded`],
+          ...Object.keys(Leaderboard['data']).sort((a, b) => {
+            return Leaderboard['data'][b] - Leaderboard['data'][a]
+          }).map((username) => {
+            const balance = Number(Leaderboard['data'][username]/Math.pow(10, decimals))
+            const total = Number(Leaderboard['data']['total']/Math.pow(10, decimals))
+            const percentage = Number((balance / total) * 100).toFixed(6)
+            return [
+              String(username),
+              String(`${balance.toLocaleString()} ${symbol}`),
+              String(`${percentage} %`)
+            ]
+          })
         ],
       }
     });
@@ -121,17 +131,45 @@ export default function Organization({ state }) {
 
     this.screen.append(this.supplyChart)
 
+    let tS = 0
+    let rS = 0
+
     var totalSupply = {
-      title: `${symbol}`,
-      x: Object.keys(SupplyGrowth).map((s) => {
-        return new Date(SupplyGrowth[s].date).toDateString()
+      title: `${symbol} Total`,
+      x: Object.keys(Contribution).sort((a,b) => {
+        return Contribution[a]['args']['date'] - Contribution[a]['args']['date']
+      }).map((s) => {
+        return new Date(Contribution[s]['args'].date * 1000).toDateString()
       }),
-      y: Object.keys(SupplyGrowth).map((s) => {
-        return SupplyGrowth[s]['value']['total'] / Math.pow(10, decimals)
-      })
+      y: Object.keys(Contribution).sort((a,b) => {
+        return Contribution[a]['args']['date'] - Contribution[a]['args']['date']
+      }).map((s) => {
+        let v = Number(Contribution[s]['args']['value'] / Math.pow(10, decimals))
+        v += Number(Contribution[s]['args']['reservedValue'] / Math.pow(10, decimals))
+        tS += v
+        return tS
+      }),
+      style: { line: 202 }
     }
 
-    this.supplyChart.setData(totalSupply)
+    var reservedSupply = {
+      title: `${symbol} Reserved`,
+      x: Object.keys(Contribution).sort((a,b) => {
+        return Contribution[a]['args']['date'] - Contribution[a]['args']['date']
+      }).map((s) => {
+        return new Date(Contribution[s]['args'].date * 1000).toDateString()
+      }),
+      y: Object.keys(Contribution).sort((a,b) => {
+        return Contribution[a]['args']['date'] - Contribution[a]['args']['date']
+      }).map((s) => {
+        let v = (Contribution[s]['args']['value']) / Math.pow(10, decimals)
+        rS = rS + v
+        return rS
+      }),
+      style: { line: 34 }
+    }
+
+    this.supplyChart.setData([totalSupply, reservedSupply])
 
     this.screen.append(this.orgDetails)
     this.screen.append(this.leaderBoard)

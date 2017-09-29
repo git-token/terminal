@@ -4,13 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
-
-var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
 var _keys = require('babel-runtime/core-js/object/keys');
 
 var _keys2 = _interopRequireDefault(_keys);
+
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
 var _extends2 = require('babel-runtime/helpers/extends');
 
@@ -44,13 +44,12 @@ function Organization(_ref) {
       decimals = currentOrganization.decimals;
 
 
-  if (organizations[organization] && organizations[organization]['Contribution'] && organizations[organization]['TokenSupply'] && organizations[organization]['SupplyGrowth']) {
+  if (organizations[organization] && organizations[organization]['Contribution'] && organizations[organization]['TokenSupply'] && organizations[organization]['Leaderboard']) {
     var _organizations$organi = organizations[organization],
         Contribution = _organizations$organi.Contribution,
         TokenSupply = _organizations$organi.TokenSupply,
-        SupplyGrowth = _organizations$organi.SupplyGrowth;
+        Leaderboard = _organizations$organi.Leaderboard;
 
-    // console.log('SupplyGrowth', SupplyGrowth)
 
     this.screen.remove(this.registry);
     this.orgDetails ? this.screen.remove(this.orgDetails) : null;
@@ -67,7 +66,9 @@ function Organization(_ref) {
         width: '33%',
         align: 'left'
       }, this.defaultOptions, {
-        rows: [['Organization', 'https://github.com/' + organization], ['Token Address', token_address], ['Token Symbol', symbol], ['Token Name', name], ['Token Decimals', String(decimals)], ['Token Supply', String(TokenSupply.total / Math.pow(10, decimals))], ['']]
+        rows: [['Organization', 'https://github.com/' + organization], ['Token Address', token_address], ['Token Symbol', symbol], ['Token Name', name],
+        // ['Token Decimals',  String(decimals) ],
+        ['Token Supply', Number(TokenSupply.total / Math.pow(10, decimals)).toLocaleString() + ' ' + symbol], ['']]
       })
     });
 
@@ -80,7 +81,14 @@ function Organization(_ref) {
         width: '33%',
         align: 'left'
       }, this.defaultOptions, {
-        rows: [['Username', symbol + ' Balance', 'Percentage Contributed']]
+        rows: [['Username', symbol + ' Balance', 'Percentage Tokens Awarded']].concat((0, _toConsumableArray3.default)((0, _keys2.default)(Leaderboard['data']).sort(function (a, b) {
+          return Leaderboard['data'][b] - Leaderboard['data'][a];
+        }).map(function (username) {
+          var balance = Number(Leaderboard['data'][username] / Math.pow(10, decimals));
+          var total = Number(Leaderboard['data']['total'] / Math.pow(10, decimals));
+          var percentage = Number(balance / total * 100).toFixed(6);
+          return [String(username), String(balance.toLocaleString() + ' ' + symbol), String(percentage + ' %')];
+        })))
       })
     });
 
@@ -128,17 +136,45 @@ function Organization(_ref) {
 
     this.screen.append(this.supplyChart);
 
+    var tS = 0;
+    var rS = 0;
+
     var totalSupply = {
-      title: '' + symbol,
-      x: (0, _keys2.default)(SupplyGrowth).map(function (s) {
-        return new Date(SupplyGrowth[s].date).toDateString();
+      title: symbol + ' Total',
+      x: (0, _keys2.default)(Contribution).sort(function (a, b) {
+        return Contribution[a]['args']['date'] - Contribution[a]['args']['date'];
+      }).map(function (s) {
+        return new Date(Contribution[s]['args'].date * 1000).toDateString();
       }),
-      y: (0, _keys2.default)(SupplyGrowth).map(function (s) {
-        return SupplyGrowth[s]['value']['total'] / Math.pow(10, decimals);
-      })
+      y: (0, _keys2.default)(Contribution).sort(function (a, b) {
+        return Contribution[a]['args']['date'] - Contribution[a]['args']['date'];
+      }).map(function (s) {
+        var v = Number(Contribution[s]['args']['value'] / Math.pow(10, decimals));
+        v += Number(Contribution[s]['args']['reservedValue'] / Math.pow(10, decimals));
+        tS += v;
+        return tS;
+      }),
+      style: { line: 202 }
     };
 
-    this.supplyChart.setData(totalSupply);
+    var reservedSupply = {
+      title: symbol + ' Reserved',
+      x: (0, _keys2.default)(Contribution).sort(function (a, b) {
+        return Contribution[a]['args']['date'] - Contribution[a]['args']['date'];
+      }).map(function (s) {
+        return new Date(Contribution[s]['args'].date * 1000).toDateString();
+      }),
+      y: (0, _keys2.default)(Contribution).sort(function (a, b) {
+        return Contribution[a]['args']['date'] - Contribution[a]['args']['date'];
+      }).map(function (s) {
+        var v = Contribution[s]['args']['value'] / Math.pow(10, decimals);
+        rS = rS + v;
+        return rS;
+      }),
+      style: { line: 34 }
+    };
+
+    this.supplyChart.setData([totalSupply, reservedSupply]);
 
     this.screen.append(this.orgDetails);
     this.screen.append(this.leaderBoard);

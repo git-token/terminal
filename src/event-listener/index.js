@@ -16,7 +16,7 @@ import {
   TokenSupply,
   cacheState,
   retrieveState,
-  ContributionHistory
+  Leaderboard
 } from './utils/index'
 
 
@@ -33,11 +33,12 @@ export default class GitTokenTerminalEventListener {
 
     this.handleEvent          = handleEvent.bind(this)
     this.handleContribution   = handleContribution.bind(this)
-    this.ContributionHistory  = ContributionHistory.bind(this)
     this.SupplyGrowth         = SupplyGrowth.bind(this)
     this.TokenSupply          = TokenSupply.bind(this)
+    this.Leaderboard          = Leaderboard.bind(this)
     this.cacheState           = cacheState.bind(this)
     this.retrieveState        = retrieveState.bind(this)
+
 
 
     this.retrieveState().then((state) => {
